@@ -55,11 +55,14 @@ class MainWindow(Gtk.Window):
         self.flowbox.connect("child-activated", self.test)
         self.flowbox.set_valign(Gtk.Align.START)
         scrollbox.add(self.flowbox)
-        for i in os.listdir(self.backgrounds):
-            w = Widget("{}/{}".format(self.backgrounds, i))
-            self.deneme.append("{}/{}".format(self.backgrounds, i))
-            self.flowbox.add(w)
-            
+        
+        for j in os.walk(self.backgrounds):
+            for test in j[2]:
+                if test.endswith(".jpg") is True:
+                    w = Widget( "{}/{}".format(j[0], test) )
+                    self.deneme.append( "{}/{}".format(j[0], test) )
+                    self.flowbox.add(w)
+        
     def test(self, deneme, heyo):        
         wallpaper = self.deneme[heyo.get_index()]
         self.wallpaper_select_index = heyo.get_index()
