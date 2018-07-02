@@ -1,7 +1,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
+from gi.repository import Gtk, GdkPixbuf, Gio
 import os
 class Widget(Gtk.VBox):
     def __init__(self, picture):
@@ -46,13 +46,13 @@ class MainWindow(Gtk.Window):
             
     def test(self, deneme, heyo):
 
-        gnome = "gsettings set org.gnome.desktop.background picture-uri"
+        gnome = "gsettings set org.gnome.desktop.background picture-uri insert-spaces true"
         
         wallpaper = self.deneme[heyo.get_index()]
         
-        string = "{} {}".format(gnome, wallpaper)
-        
-        os.system(string)
+        settings = Gio.Settings.new("org.gnome.desktop.background")
+        settings.set_string("picture-uri", wallpaper)
+        settings.apply()
         
 
     def update_image(self, widged, data=None):
