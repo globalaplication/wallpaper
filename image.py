@@ -1,8 +1,9 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf, Gio
 import os
+from gi.repository import Gtk, GdkPixbuf, Gio
+
 class Widget(Gtk.VBox):
     def __init__(self, picture):
         Gtk.VBox.__init__(self)
@@ -21,6 +22,7 @@ class MainWindow(Gtk.Window):
         Gtk.Window.__init__(self, title='GMouse 600')
         self.set_default_size(800, 550)
         self.deneme = []
+        self.backgrounds = "/usr/share/backgrounds"
 
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
@@ -39,17 +41,15 @@ class MainWindow(Gtk.Window):
         self.flowbox.connect("child-activated", self.test)
         self.flowbox.set_valign(Gtk.Align.START)
         scrollbox.add(self.flowbox)
-        for i in os.listdir("/usr/share/backgrounds"):
-            w=Widget("/usr/share/backgrounds/"+i)
-            self.deneme.append("/usr/share/backgrounds/"+i)
+        for i in os.listdir(self.backgrounds):
+            w=Widget("{}/{}".format(self.backgrounds, i))
+            self.deneme.append("{}/{}".format(self.backgrounds, i))
             self.flowbox.add(w)
             
     def test(self, deneme, heyo):
 
-        gnome = "gsettings set org.gnome.desktop.background picture-uri insert-spaces true"
         
         wallpaper = self.deneme[heyo.get_index()]
-        
         settings = Gio.Settings.new("org.gnome.desktop.background")
         settings.set_string("picture-uri", wallpaper)
         settings.apply()
